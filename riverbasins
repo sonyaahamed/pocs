@@ -1,0 +1,9 @@
+%creating a graph of countries sharing river basins with other countries
+
+%Col 1=CNODEID	Col2=BNODEID
+M = dlmread('EdgeIDS.csv');
+countryID=M(:,1);
+basinID=M(:,2);
+G = graph(countryID,basinID)
+
+plot(G)

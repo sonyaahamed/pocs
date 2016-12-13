@@ -20,7 +20,7 @@ mean(degree(G))
 
 %bipartite graph
 
-% Make a random MxN adjacency matrix
+% Make the adjacency matrix
 
 Mat = dlmread('EdgeIDS.csv');
 countryID=Mat(:,1);
@@ -43,7 +43,7 @@ g = graph(big_adj);
 % Plot
 h = plot(g);
 
-% Make it pretty
+% Clean it up
 h.XData(1:m) = 1;
 h.XData((m+1):end) = 2;
 h.YData(1:m) = linspace(0,1,m);

@@ -1,9 +1,56 @@
-%creating a graph of countries sharing river basins with other countries
 
+
+%Single node type
 %Col 1=CNODEID	Col2=BNODEID
-M = dlmread('EdgeIDS.csv');
+M = dlmread('EdgeIDSold.csv');
 countryID=M(:,1);
 basinID=M(:,2);
+basin = textread('BasinEdgeCodes.csv', '%s', 'delimiter', '\n');
+country = textread('CountryEdgeCodes.csv', '%s', 'delimiter', '\n');
 G = graph(countryID,basinID)
-
 plot(G)
+title('International River Basin Network', 'fontsize',14);
+xlabel('148 countries; 276 river basins ','fontsize',14); % x-axis label
+ylabel('mean degree: 3.54','fontsize',14); % y-axis labels
+A = adjacency(G)
+[Cp, c]=avgClusteringCoefficient(A);
+mean(degree(G))
+%end this works 
+
+
+%bipartite graph
+
+% Make a random MxN adjacency matrix
+
+Mat = dlmread('EdgeIDS.csv');
+countryID=Mat(:,1);
+basinID=Mat(:,2);
+
+adjmat=zeros(max(countryID),max(basinID)); %initialize an Adjacency matrix
+m=max(countryID);
+n=max(basinID);
+
+for i=1:size(basinID)
+    adjmat(countryID(i),basinID(i))=1;
+end
+
+
+% Expand out to symmetric (M+N)x(M+N) matrix
+big_adj = [zeros(m,m), adjmat;
+         adjmat', zeros(n,n)];     
+g = graph(big_adj);
+
+% Plot
+h = plot(g);
+
+% Make it pretty
+h.XData(1:m) = 1;
+h.XData((m+1):end) = 2;
+h.YData(1:m) = linspace(0,1,m);
+h.YData((m+1):end) = linspace(0,1,n);
+title('International River Basins (Bipartite Graph)', 'fontsize',14);
+xlabel('148 countries (left); 276 river basins (right)','fontsize',14); % x-axis label
+ylabel('mean degree: 3.54','fontsize',14); % y-axis labels
+
+mean(degree(g))
+%bipartite: this works!
